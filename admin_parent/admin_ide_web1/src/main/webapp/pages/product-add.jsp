@@ -296,7 +296,6 @@
 			setSidebarActive("order-manage");
 			$("#datepicker-a3").datetimepicker({
 				format : "yyyy-mm-dd hh:ii",
-
 			});
 
 		});

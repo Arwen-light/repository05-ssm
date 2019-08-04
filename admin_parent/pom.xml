@@ -29,7 +29,8 @@
         <spring.security.version>5.0.1.RELEASE</spring.security.version>
     </properties>
 
-    <dependencies>        <!-- spring -->
+    <!-- spring -->
+    <dependencies>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -181,7 +182,6 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <pluginManagement>

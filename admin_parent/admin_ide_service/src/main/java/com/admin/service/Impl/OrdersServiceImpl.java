@@ -25,4 +25,13 @@ public class OrdersServiceImpl implements IOrdersService {
         List<Orders> ordersList = iOrdersDao.findAll();
         return ordersList;
     }
+
+
+    // 根据 orders --> id 进行某个订单信息查询
+    @Override
+    public Orders findById(String id) throws Exception {
+
+        Orders order = iOrdersDao.findById(id);
+        return order;
+    }
 }

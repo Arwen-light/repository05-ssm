@@ -1,5 +1,7 @@
 package com.admin.domain;
 
+import com.admin.utils.DateUtils;
+
 import java.util.Date;
 import java.util.List;
 
@@ -25,13 +27,13 @@ public class Orders {
     private String orderNum;
     private Date orderTime;
     private String orderTimeStr;
-    private int orderStatus;
+    private Integer orderStatus;
     private String orderStatusStr;
-    private int peopleCount;
+    private Integer peopleCount;
     private Product product;
     private List<Traveller> travellers;
     private Member member;
-    private Integer payType;
+    private Integer payType;  //支付方式(0 支付宝 1 微信 2其它)
     private String payTypeStr;
     private String orderDesc;
 
@@ -60,6 +62,9 @@ public class Orders {
     }
 
     public String getOrderTimeStr() {
+        if(orderTime != null){
+            orderTimeStr = DateUtils.date2String(orderTime, "yyyy-MM-dd HH:mm:ss");
+        }
         return orderTimeStr;
     }
 
@@ -76,6 +81,16 @@ public class Orders {
     }
 
     public String getOrderStatusStr() {
+        //订单状态(0 未支付 1 已支付)
+        if(orderStatus !=null){
+            if (orderStatus == 0){
+                orderStatusStr = "未支付";
+            };
+            if (orderStatus == 1){
+                orderStatusStr = "已支付";
+            };
+        };
+
         return orderStatusStr;
     }
 
@@ -124,6 +139,25 @@ public class Orders {
     }
 
     public String getPayTypeStr() {
+        ////支付方式(0 支付宝 1 微信 2其它)
+        if (payType != null) {
+            if (payType == 0) {
+                payTypeStr = "支付宝";
+            }
+            ;
+
+            if (payType == 1) {
+                payTypeStr = "微信";
+            }
+            ;
+
+            if (payType == 2) {
+                payTypeStr = "其他";
+            }
+            ;
+
+        }
+
         return payTypeStr;
     }
 

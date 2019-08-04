@@ -55,4 +55,17 @@ public class OrdersController {
         return modelAndView;
 
     }
+
+    // 订单详情的查询
+
+    @RequestMapping("/findById.do")
+    public ModelAndView findOrdersById(@RequestParam(name = "id",required = true) String id) throws Exception {
+        ModelAndView modelAndView = new ModelAndView();
+        Orders orders = ordersServiceImpl.findById(id);
+        modelAndView.addObject("orders",orders);
+        modelAndView.setViewName("orders-show");
+        return modelAndView;
+    }
+
+
 }

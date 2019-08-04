@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements IUserService {
 
+
     @Autowired
     private IUserDao iUserDao;
 
@@ -30,9 +32,9 @@ public class UserServiceImpl implements IUserService {
             UserInfo userInfor = iUserDao.findUserByUserName(username);
 
             if (userInfor != null) {
-                return new User(userInfor.getUsername(), "{noop}" + userInfor.getPassword(),
-                       userInfor.getStatus()==1?true:false ,true,true,true,
-                        getAuthrorities(userInfor.getRoles()) );
+                return new User(userInfor.getUsername(), userInfor.getPassword(),
+                        userInfor.getStatus() == 1 ? true : false, true, true, true,
+                        getAuthrorities(userInfor.getRoles()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,10 +43,10 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
 
-    public List<SimpleGrantedAuthority> getAuthrorities(List<Role> roles){
+    public List<SimpleGrantedAuthority> getAuthrorities(List<Role> roles) {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-       /* authorities.add(new SimpleGrantedAuthority("ROLE_USER"));  //ROLE_USER*/
+        /* authorities.add(new SimpleGrantedAuthority("ROLE_USER"));  //ROLE_USER*/
         for (Role role : roles) {
             String roleName = role.getRoleName();
             authorities.add(new SimpleGrantedAuthority("ROLE_" + roleName));
@@ -52,4 +54,28 @@ public class UserServiceImpl implements IUserService {
         return authorities;
     }
 
+    @Override
+    public List<UserInfo> findUsers() throws Exception {
+
+        List<UserInfo> userList = iUserDao.findAll();
+        return userList;
+    }
+
+    // userinfo 有关密码明文和密文转化处理的问题
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Override
+    public void Save(UserInfo userInfo) throws Exception {
+        String cryptpassword = bCryptPasswordEncoder.encode(userInfo.getPassword());
+        userInfo.setPassword(cryptpassword);
+        iUserDao.save(userInfo);
+
+    }
+
+    @Override
+    public UserInfo findById(String id) throws Exception {
+        UserInfo userInfo = iUserDao.findById(id);
+        return userInfo;
+    }
 }

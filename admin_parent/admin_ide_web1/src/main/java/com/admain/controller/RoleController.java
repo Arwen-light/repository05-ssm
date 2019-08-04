@@ -1,7 +1,9 @@
 package com.admain.controller;
 
 
+import com.admin.domain.Permission;
 import com.admin.domain.Role;
+import com.admin.domain.UserInfo;
 import com.admin.service.IRoleService;
 import org.apache.ibatis.annotations.ResultMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,33 @@ public class RoleController {
     }
 
     @RequestMapping("/save.do")
-    public String saveRole(Role role)throws Exception{
+    public String saveRole(Role role) throws Exception {
 
         iRoleService.save(role);
 
-        return  "redirect:findAll.do";
+        return "redirect:findAll.do";
+    }
+
+
+    // 查询Roleid信息和当前用户没有的角色的角色信息
+    @RequestMapping("/findRoleByIdAndAllPermission.do")
+    public ModelAndView findRoleByIdAndAllPermission(String id) throws Exception {
+        ModelAndView modelAndView = new ModelAndView();
+        // 查询当前角色的信息
+        Role role = iRoleService.findById(id);
+        // 查询当前角色所没有的资源配置List集合
+        List<Permission> permissionList = iRoleService.findOtherPermissions(id);
+        modelAndView.addObject("role", role);
+        modelAndView.addObject("permissionList", permissionList);
+        modelAndView.setViewName("role-permission-add");
+        return modelAndView;
+    }
+
+
+    //addPermissionToRole.do
+    @RequestMapping("/addPermissionToRole.do")
+    public String addPermissionToRole(String roleId, String[] ids) throws Exception {
+        iRoleService.addPermissionToRole(roleId, ids);
+        return "redirect:/role/findAll.do";
     }
 }

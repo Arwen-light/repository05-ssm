@@ -1,5 +1,6 @@
 package com.admin.dao;
 
+import com.admin.domain.Role;
 import com.admin.domain.UserInfo;
 import org.apache.ibatis.annotations.*;
 
@@ -43,4 +44,12 @@ public interface IUserDao {
             ),
     })
     UserInfo findById(String id)throws Exception;
+
+
+    @Select("select * from role where id not in (select roleid from users_role where userid = #{id})")
+    List<Role> findOtherRoles(String id) throws  Exception;
+
+
+    @Insert("insert into users_role (roleId,userId) values (#{roleId},#{userId})")
+    void addRoleToUser(@Param("roleId") String id,@Param("userId") String userId);
 }

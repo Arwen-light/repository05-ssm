@@ -16,8 +16,11 @@
            ">
 
 
-    <!-- 扫描controller的注解，别的不扫描 -->
+    <!-- 扫描controller的log注解，别的不扫描 -->
     <context:component-scan base-package="com.admain.controller">
+    </context:component-scan>
+    <!-- 扫描controller的log注解，别的不扫描 -->
+    <context:component-scan base-package="com.admain.log">
     </context:component-scan>
 
     <!-- 配置视图解析器 -->
@@ -41,6 +44,6 @@
         JDK动态代理，要求必须有接口
         cglib代理，生成子类对象，proxy-target-class="true" 默认使用cglib的方式
     -->
-<!--    <aop:aspectj-autoproxy proxy-target-class="true"/>-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 
 </beans>

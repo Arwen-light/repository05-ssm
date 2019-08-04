@@ -5,12 +5,15 @@ import com.admin.domain.Orders;
 import com.admin.service.IOrdersService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 // Orders 添加订单
@@ -37,6 +40,9 @@ public class OrdersController {
 //    分页后代码 pageBean
 
     @RequestMapping("/findAll.do")
+    /*@RolesAllowed("ADMIN")*/
+//    @Secured("ROLE_newRole")
+    @PreAuthorize("principal.username=='tom' and hasRole('ROLE_newRole')")
     public ModelAndView findOrdersAll(@RequestParam(name = "page", required = true, defaultValue = "1") int page,
                                       @RequestParam(name = "size", required = true, defaultValue = "4") int size)
             throws Exception {

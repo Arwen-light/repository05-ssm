@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:security="http://www.springframework.org/schema/security"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:securiry="http://www.springframework.org/schema/c"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/security
@@ -13,9 +13,9 @@
     <security:http security="none" pattern="/img/**"/>
     <security:http security="none" pattern="/favicon.ico"/>
     <security:http security="none" pattern="/plugins/**"/>
-    <security:http auto-config="true" use-expressions="false">
+    <security:http auto-config="true" use-expressions="true">
         <!-- 配置资料连接，表示任意路径都需要ROLE_USER权限 -->
-        <security:intercept-url pattern="/**" access="ROLE_USER ,ROLE_ADMIN"/>
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER' ,'ROLE_ADMIN')"/>
         <!-- 自定义登陆页面，login-page 自定义登陆页面 authentication-failure-url 用户权限校验失败之后才会跳转到这个页面，如果数据库中没有这个用户则不会跳转到这个页面。
             default-target-url 登陆成功后跳转的页面。 注：登陆页面用户名固定 username，密码 password，action:login -->
         <security:form-login login-page="/login.jsp"
@@ -29,7 +29,13 @@
                          logout-success-url="/login.jsp"/>
         <!-- 关闭CSRF,默认是开启的 -->
         <security:csrf disabled="true"/>
+
     </security:http>
+
+    <!--  Spring security配置文件，开启对jsr250注解支持-->
+    <security:global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled" secured-annotations="enabled"/>
+
+
 
     <!-- 切换成数据库中的用户名和密码 -->
     <security:authentication-manager>
